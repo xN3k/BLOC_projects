@@ -33,8 +33,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       emit(state.copyWith(searchList: [], searchMessage: ''));
     } else {
       searchedList = state.postList
-          .where(
-              (element) => element.title.toString() == event.search.toString())
+          .where((element) =>
+              element.title.toString().toLowerCase().contains(event.search))
           .toList();
       if (searchedList.isEmpty) {
         emit(state.copyWith(
