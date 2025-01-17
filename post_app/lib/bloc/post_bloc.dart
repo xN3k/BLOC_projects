@@ -6,7 +6,7 @@ import 'package:post_app/repository/post_repository.dart';
 import 'package:post_app/utils/enums.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
-  List<PostModel> searchedPostList = [];
+  List<PostModel> searchedList = [];
   PostRepository postRepository = PostRepository();
   PostBloc() : super(PostState()) {
     on<PostFetch>(fetchPostApi);
@@ -29,10 +29,20 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   }
 
   void _searchedResult(SearchPost event, Emitter<PostState> emit) async {
-    searchedPostList = state.postList
-        .where((element) => element.id.toString() == event.search.toString())
-        .toList();
-
-    emit(state.copyWith(searchList: searchedPostList));
+    if (event.search.isEmpty) {
+      emit(state.copyWith(searchList: [], searchMessage: ''));
+    } else {
+      searchedList = state.postList
+          .where(
+              (element) => element.title.toString() == event.search.toString())
+          .toList();
+      if (searchedList.isEmpty) {
+        emit(state.copyWith(
+            searchList: searchedList,
+            searchMessage: "No data found try another phrase"));
+      } else {
+        emit(state.copyWith(searchList: searchedList, searchMessage: ''));
+      }
+    }
   }
 }
