@@ -9,25 +9,30 @@ class PostState extends Equatable {
 
   final String message;
 
+  final List<PostModel> searchList;
+
   const PostState({
     this.message = '',
     this.postList = const [],
     this.postStatus = PostStatus.loading,
+    this.searchList = const [],
   });
 
   PostState copyWith({
     PostStatus? postStatus,
     List<PostModel>? postList,
     String? message,
+    List<PostModel>? searchList,
   }) {
     return PostState(
       postList: postList ?? this.postList,
       postStatus: postStatus ?? this.postStatus,
       message: message ?? this.message,
+      searchList: searchList ?? this.searchList,
     );
   }
 
   @override
   // TODO: implement props
-  List<Object?> get props => [postList, postStatus, message];
+  List<Object?> get props => [postList, postStatus, message, searchList];
 }

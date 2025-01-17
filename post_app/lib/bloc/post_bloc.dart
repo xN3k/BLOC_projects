@@ -1,13 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:post_app/bloc/post_event.dart';
 import 'package:post_app/bloc/post_state.dart';
+import 'package:post_app/models/model.dart';
 import 'package:post_app/repository/post_repository.dart';
 import 'package:post_app/utils/enums.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
+  List<PostModel> searchedPostList = [];
   PostRepository postRepository = PostRepository();
   PostBloc() : super(PostState()) {
     on<PostFetch>(fetchPostApi);
+    on<SearchPost>(_searchedResult);
   }
 
   void fetchPostApi(PostFetch event, Emitter<PostState> emit) async {
@@ -23,5 +26,13 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         message: error.toString(),
       ));
     });
+  }
+
+  void _searchedResult(SearchPost event, Emitter<PostState> emit) async {
+    searchedPostList = state.postList
+        .where((element) => element.id.toString() == event.search.toString())
+        .toList();
+
+    emit(state.copyWith(searchList: searchedPostList));
   }
 }

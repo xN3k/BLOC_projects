@@ -27,7 +27,7 @@ class _PostScreenState extends State<PostScreen> {
         title: Text("Posts"),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(25),
         child: BlocBuilder<PostBloc, PostState>(
           builder: (context, state) {
             switch (state.postStatus) {
@@ -38,15 +38,46 @@ class _PostScreenState extends State<PostScreen> {
               case PostStatus.failure:
                 return Text(state.message.toString());
               case PostStatus.success:
-                return ListView.builder(
-                  itemCount: state.postList.length,
-                  itemBuilder: (context, index) {
-                    final item = state.postList[index];
-                    return ListTile(
-                      title: Text(item.title.toString()),
-                      subtitle: Text(item.body.toString()),
-                    );
-                  },
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(
+                        suffixIcon: Icon(Icons.search),
+                        hintText: "Search",
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: (filterKey) {
+                        context.read<PostBloc>().add(SearchPost(filterKey));
+                      },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: state.searchList.isEmpty
+                            ? state.postList.length
+                            : state.searchList.length,
+                        itemBuilder: (context, index) {
+                          if (state.searchList.isNotEmpty) {
+                            final item = state.searchList[index];
+                            return ListTile(
+                              title: Text(item.title.toString()),
+                              subtitle: Text(item.body.toString()),
+                            );
+                          } else {
+                            final item = state.postList[index];
+                            return ListTile(
+                              title: Text(item.title.toString()),
+                              subtitle: Text(item.body.toString()),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 );
             }
           },
