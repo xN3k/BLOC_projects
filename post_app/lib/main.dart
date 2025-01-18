@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:post_app/bloc/post_bloc.dart';
-import 'package:post_app/ui/post_screen.dart';
+import 'package:post_app/view/post_screen.dart';
 
 void main() {
   runApp(const MyApp());
