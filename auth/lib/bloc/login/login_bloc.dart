@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
@@ -29,6 +31,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final response =
           await http.post(Uri.parse("https://reqres.in/api/login"), body: data);
 
+      final data1 = json.decode(response.body);
+
       if (response.statusCode == 202) {
         emit(
           state.copyWith(
@@ -37,8 +41,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } else {
         emit(
           state.copyWith(
-              loginStatus: LoginStatus.error,
-              message: "Something went wrong, please try again later"),
+              loginStatus: LoginStatus.error, message: data1['error']),
         );
       }
     } catch (error) {
