@@ -1,4 +1,6 @@
-import 'package:clean_code/config/routes/routes_name.dart';
+import 'package:clean_code/config/components/internet_exception_widget.dart';
+import 'package:clean_code/data/exceptions/app_exceptions.dart';
+
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -15,11 +17,19 @@ class _SplashScreenState extends State<SplashScreen> {
       appBar: AppBar(
         title: Text("Splash"),
       ),
-      body: Center(
-        child: TextButton(
-            onPressed: () =>
-                Navigator.pushNamed(context, RoutesName.homeScreen),
-            child: Text("Home")),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        NoInternetException('');
+      }),
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            children: [
+              InternetException(
+                onPress: () {},
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
